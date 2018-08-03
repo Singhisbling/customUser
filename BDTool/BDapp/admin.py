@@ -1,34 +1,33 @@
 from django.contrib import admin
 from .models import *
-from django.contrib.auth.forms import UserCreationForm
+#from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.admin import UserAdmin
-from django import forms
-
-class UserCreationFormExtended(UserCreationForm):
-    def __init__(self, *args, **kwargs):
-        super(UserCreationFormExtended, self).__init__(*args, **kwargs)
-        self.fields['email'] = forms.EmailField(label=_("E-mail"), max_length=75,required = True)
-
-    def clean(self):
-        email = self.cleaned_data.get("email")
-        email_list = self.cleaned_data.get("email")
-        if email in email_list:
-            raise forms.ValidationError(
-                self.error_messages['email already exist'],
-            )
-        return email
-
-UserAdmin.add_form = UserCreationFormExtended
-UserAdmin.add_fieldsets = (
-    (None, {
-        'classes': ('wide',),
-        'fields': ( 'username','email', 'password1', 'password2',)
-    }),
-)
+from django.utils.translation import gettext, gettext_lazy as _
+#from django import forms
 
 
-admin.site.register(customUser)
+class custom(UserAdmin):
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('username', 'email', 'password1', 'password2',)
+        }),
+    )
+
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
+        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
+                                       'groups', 'user_permissions')}),
+        (_('Important dates'), {'fields': ('last_login',)}),
+    )
+
+
+
+
+
+
+admin.site.register(customUser,custom)
 admin.site.register(Project)
 admin.site.register(Client)
 admin.site.register(Technology)
-#admin.site.register()

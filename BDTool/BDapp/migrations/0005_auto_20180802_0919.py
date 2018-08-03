@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='customuser',
+            model_name='custom user',
             name='is_superuser',
             field=models.BooleanField(default=False),
         ),
